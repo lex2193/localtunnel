@@ -1,6 +1,8 @@
-FROM node:alpine
+FROM alpine
 ENV NODE_ENV=production
+RUN apk add --update nodejs npm
 WORKDIR /app
-COPY package.json app.js /app
-RUN npm install --omit=optional --no-audit --no-fund
-ENTRYPOINT ["/usr/local/bin/npm", "start"]
+COPY package*.json ./
+RUN npm ci --only=production --no-audit --no-fund
+COPY . .
+ENTRYPOINT ["npm", "start"]
